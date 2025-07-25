@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projector新手指南</title>
+  <style>
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #34495e;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: none;
+      color: white;
+      border: none;
+      padding: 1rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    nav button:hover {
+      background-color: #89b2e0a6;
+    }
+    .content {
+      padding: 2rem;
+      display: none;
+      max-width: 900px;
+      margin: auto;
+      line-height: 1.6;
+    }
+    .content.active {
+      display: block;
+    }
+    table, th, td {
+      border: 1px solid #999;
+      border-collapse: collapse;
+      padding: 0.5rem;
+    }
+    input {
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 400px;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #fff;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      overflow-x: auto;
+    }
+    /* 統一tab按鈕樣式及置中 */
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .tab-buttons button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      min-width: 100px;
+      text-align: center;
+    }
+    .tab-buttons button:hover {
+      background-color: #ddd;
+    }
+    .tab-buttons button.active-tab-btn {
+      background-color: #839dba;
+      color: #fff;
+      font-weight: bold;
+    }
+    /* 各功能區專用tab內容 */
+    .bom-tab, .process-tab, .projector-tab, .product-tab {
+      display: none;
+    }
+
+    /* 卡片式料號分類專用樣式 */
+    .classify-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-width: 700px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    .card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 0.75rem 1.2rem;
+      flex: 1 0 180px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      user-select: none;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .card .code {
+      font-weight: bold;
+      color: #2c3e50;
+      min-width: 50px;
+      text-align: right;
+      padding-right: 10px;
+      border-right: 1px solid #eee;
+    }
+    .card .name {
+      flex-grow: 1;
+      padding-left: 10px;
+      color: #555;
+    }
+    
+    /* 投影機互動圖片樣式 */
+    .image-panel {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      background: #fff;
+      padding: 10px;
+    }
+    .image-panel img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .hotspot {
+      position: absolute;
+      border: 2px dashed red;
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 10;
+      background-color: rgba(255,0,0,0.1);
+      display: none;
+    }
+    .hotspot.selected {
+      background-color: rgba(253, 123, 123, 0.3);
+      border: 2px dashed red;
+    }
+    .hotspot.dimmed {
+      opacity: 0.3;
+    }
+    .image-panel.dimmed {
+      opacity: 0.7;
+    }
+    #infoBox {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    #infoBox h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    #backButton {
+      display: none;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background: #5d8dc1;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+    #me-description {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-left: 4px solid #5d8dc1;
+    }
+    
+    /* 產品列表樣式（中強光電分類） */
+    .product-list {
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    .product-list h3 {
+      margin-top: 1.2rem;
+      color: #2c3e50;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    .product-list ul {
+      padding-left: 1.4rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    details {
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 0.5rem;
+    }
+    details summary {
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    details[open] summary {
+      margin-bottom: 0.5rem;
+    }
+    details ul {
+      padding-left: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Projector新手指南</h1>
+  </header>
+  <nav>
+    <button onclick="showSection('bom')">BOM</button>
+    <button onclick="showSection('process')">產品流程</button>
+    <button onclick="showSection('projector')">投影機</button>
+    <button onclick="showSection('product')">中強光電產品</button>
+  </nav>
+
+  <!-- BOM -->
+  <div id="bom" class="content">
+    <div class="tab-buttons">
+      <button id="btn-bom-overview" class="active-tab-btn" onclick="showBomTab('overview')">BOM</button>
+      <button id="btn-bom-classify" onclick="showBomTab('classify')">料號分類</button>
+      <button id="btn-bom-code" onclick="showBomTab('code')">料號編碼原則</button>
+      <button id="btn-bom-elements" onclick="showBomTab('elements')">BOM表</button>
+      <button id="btn-bom-process" onclick="showBomTab('process')">BOM 發行流程</button>
+    </div>
+
+    <div id="bom-overview" class="bom-tab" style="display:block;">
+      <h2>BOM</h2>
+      <p><strong>BOM=物料明細表</strong>(物料料號、結構、用量、屬性....)</p>
+      <h4>BOM 結構</h4>
+      <ul>
+        <li>95：可出貨成品</li>
+        <li>DP：包裝階段(包材)</li>
+        <li>DC：組立階段(虛擬階、整台投影機的裸機)</li>
+        <li>AK：配件組</li>
+      </ul>
+    </div>
+
+    <div id="bom-classify" class="bom-tab" style="display:none;">
+      <h2>料號分類</h2>
+      <div class="classify-cards">
+        <div class="card"><span class="code">00</span><span class="name">PCB電路板</span></div>
+        <div class="card"><span class="code">11</span><span class="name">接頭</span></div>
+        <div class="card"><span class="code">22</span><span class="name">已燒錄IC</span></div>
+        <div class="card"><span class="code">23</span><span class="name">光學元件</span></div>
+        <div class="card"><span class="code">35</span><span class="name">標籤</span></div>
+        <div class="card"><span class="code">36</span><span class="name">使用手冊/卡片</span></div>
+        <div class="card"><span class="code">37</span><span class="name">磁片</span></div>
+        <div class="card"><span class="code">38</span><span class="name">授權標籤</span></div>
+        <div class="card"><span class="code">39</span><span class="name">軟體(燒錄程式)</span></div>
+        <div class="card"><span class="code">41</span><span class="name">磁性零件(core)</span></div>
+        <div class="card"><span class="code">42</span><span class="name">電線組裝</span></div>
+        <div class="card"><span class="code">43</span><span class="name">開關</span></div>
+        <div class="card"><span class="code">44</span><span class="name">反向器inverter</span></div>
+        <div class="card"><span class="code">45</span><span class="name">遙控器</span></div>
+        <div class="card"><span class="code">47</span><span class="name">電源轉換器</span></div>
+        <div class="card"><span class="code">48</span><span class="name">LCD模組</span></div>
+        <div class="card"><span class="code">49</span><span class="name">電機雜項</span></div>
+        <div class="card"><span class="code">51</span><span class="name">塑膠零件</span></div>
+        <div class="card"><span class="code">52</span><span class="name">橡膠製品</span></div>
+        <div class="card"><span class="code">53</span><span class="name">皮製品</span></div>
+        <div class="card"><span class="code">54</span><span class="name">玻璃/陶瓷製品</span></div>
+        <div class="card"><span class="code">55</span><span class="name">紙製品</span></div>
+        <div class="card"><span class="code">56</span><span class="name">包裝用緩衝材</span></div>
+        <div class="card"><span class="code">57</span><span class="name">化學製品</span></div>
+        <div class="card"><span class="code">58</span><span class="name">木製品</span></div>
+        <div class="card"><span class="code">61</span><span class="name">金屬零件</span></div>
+        <div class="card"><span class="code">70</span><span class="name">自製半成品</span></div>
+        <div class="card"><span class="code">75</span><span class="name">外購半成品</span></div>
+        <div class="card"><span class="code">76</span><span class="name">委外半成品</span></div>
+        <div class="card"><span class="code">80</span><span class="name">PCB板組裝半成品</span></div>
+      </div>
+    </div>
+
+    <div id="bom-code" class="bom-tab" style="display:none;">
+      <h2>料號編碼原則</h2>
+      <p>料號編碼有12碼，分兩種情況：</p>
+      <ul>
+        <li><strong>有Project code有關：</strong> XX.AAABB.CDE□□□
+          <ul>
+            <li>XX(大分類)</li>
+            <li>AAA(Project code)</li>
+            <li>BB(流水碼)</li>
+            <li>.(G or H)</li>
+            <li>C(Reserved)</li>
+            <li>D(Customer code)</li>
+            <li>E(Extension code)</li>
+            <li>□□□(Revision code)</li>
+          </ul>
+        </li>
+        <li><strong>Project code無關：</strong>例如電子類(電阻質、電容質、IC型號)產品（共用料）編碼：XX.AAAAA.A BB
+          <ul>
+            <li>XX(大分類)</li>
+            <li>AAAAA.A(其他分類)</li>
+            <li>.(G or H)</li>
+            <li>BB(流水碼，從01~ZZ)</li>
+          </ul>
+        </li>
+      </ul>
+      <p><strong>材質標識：</strong></p>
+      <ul>
+        <li>G：無鉛材質</li>
+        <li>H：表示除了符合G料的規格之外，尚需符合無鹵素、PVC、鄰苯二甲酸酯類之化學物質管制要求。</li>
+      </ul>
+    </div>
+
+    <div id="bom-elements" class="bom-tab" style="display:none;">
+      <h2>BOM表</h2>
+      <ul>
+        <li>Level(階層)：標示料在產品結構的層次</li>
+        <li>Item(料號P/N)：物料編號</li>
+        <li>Description(名稱)：物料描述</li>
+        <li>Revision：版本</li>
+        <li>Type(屬性)：
+          <ul>
+            <li>Phantom item(區分階層)</li>
+            <li>Subassembly(開工單的半成品料號ex70階光機、80階PCBA)</li>
+            <li>Purchased item(需採購的物料)</li>
+          </ul>
+        </li>
+        <li>Status(承認狀態)：
+          <ul>
+            <li>Engineer(RD未完成承認的新料)</li>
+            <li>Condition(有條件的承認)</li>
+            <li>Active(已完成承認的物料)</li>
+            <li>Frozen(凍結的物料，通常是指EOL的物料)</li>
+            <li>Inactive(不可再使用的物料)</li>
+            <li>Phase out(RD在建立新BOM時，無法使用)</li>
+          </ul>
+        </li>
+        <li>UOM(單位)：計量單位</li>
+        <li>Quantity(數量)：需求量</li>
+        <li>ECO(工程變更單號)</li>
+      </ul>
+    </div>
+
+    <div id="bom-process" class="bom-tab" style="display:none;">
+      <h2>BOM發行流程</h2>
+      <table border="1" cellpadding="5" style="border-collapse:collapse; max-width:700px; width:100%">
+        <thead>
+          <tr>
+            <th>階段</th><th>Owner</th><th>Stage</th><th>條件</th><th>狀態</th>
+          </tr>
+        </thead>
+         <tbody>
+          <tr><td>E-BOM</td><td>RD</td><td>Mock-up</td><td>先申請Project code和料號</td><td>尚未凍結，RD可自行修改</td></tr>
+          <tr><td>Pre-BOM</td><td>RD</td><td>EVT/DVT</td><td>C1文件結案</td><td>變更須填寫Pre-BOM Change Sheet</td></tr>
+          <tr><td>Final Pre-BOM</td><td>RD</td><td>PVT</td><td>全部物料至少Condition approve</td><td>變更須發行ECR</td></tr>
+          <tr><td>Formal BOM</td><td>PE</td><td>MP</td><td>全部物料至少Condition approve</td><td>變更須發行ECR</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+   <!-- 產品流程區塊 -->
+  <div id="process" class="content">
+    <div class="tab-buttons">
+      <button id="btn-process-flow" class="active-tab-btn" onclick="showProcessTab('flow')">C0~C6 產品流程</button>
+      <button id="btn-process-authority" onclick="showProcessTab('authority')">部門權責</button>
+    </div>
+
+    <div id="process-flow" class="process-tab" style="display:block;">
+      <h2>產品流程 C0 ~ C6</h2>
+      <h3>C0：Product Plan</h3>
+      <ul>
+        <li>Product RFQ</li>
+        <li>Product Feasibility</li>
+        <li>Member List</li>
+        <li>Product Proposal</li>
+        <li>ROI estimation</li>
+      </ul>
+      <h3>C1：ID Mold Type</h3>
+      <ul>
+        <li>Product Marketing Specification</li>
+        <li>Master Schedule</li>
+        <li>Target Cost Estimation</li>
+        <li>ID Mold</li>
+        <li>DFMEA</li>
+      </ul>
+      <h3>C2：Proto</h3>
+      <ul>
+        <li>Mechanical Design</li>
+        <li>Thermal Design</li>
+        <li>Electrical Design</li>
+        <li>Software Spec</li>
+        <li>Tooling Kick Off</li>
+      </ul>
+
+      <h3>★ Review Meeting</h3>
+
+      <h3>C3：EVT</h3>
+      <ul>
+        <li>Function Test</li>
+        <li>Thermal Test</li>
+        <li>Power Test</li>
+        <li>ME Review</li>
+        <li>EE Review</li>
+      </ul>
+
+      <h3>★ Review Meeting</h3>
+
+      <h3>C4：DVT</h3>
+      <ul>
+        <li>Reliability Test</li>
+        <li>EMC Test</li>
+        <li>Safety Test</li>
+        <li>EE Tuning</li>
+        <li>Thermal Tuning</li>
+      </ul>
+
+      <h3>★ Review Meeting</h3>
+
+      <h3>C5：PVT</h3>
+      <ul>
+        <li>Golden Sample</li>
+        <li>Final Spec</li>
+        <li>Product Certification</li>
+        <li>Mass Production Schedule</li>
+        <li>MP Materials Preparation</li>
+      </ul>
+
+      <h3>★ Review Meeting</h3>
+
+      <h3>C6：MP</h3>
+      <ul>
+        <li>Mass Production</li>
+        <li>Yield Monitor</li>
+        <li>Field Feedback</li>
+        <li>Cost Down Plan</li>
+        <li>EOL Plan</li>
+      </ul>
+    </div>
+
+    <div id="process-authority" class="process-tab" style="display:none;">
+      <h2>權責</h2>
+      <details>
+        <summary><strong>1.1 專案負責人 (Project Leader)</strong></summary>
+        <p>帶領研發團隊完成新機種 CO~C5 各階段之開發設計工作，提供產品工程規格，並代表與其他部門協調進度/技術/材料溝通窗口。</p>
+      </details>
+      <details>
+        <summary><strong>1.2 研發 (RD)</strong></summary>
+        <ul>
+          <li>主導 DVT 階段問題點之分析。若分析為製程問題，則由 PE 負責對策改善。</li>
+          <li><strong>1.2.1 電子研發 (EE)</strong>：負責硬體開發及配合提供相關之開發文件，如 PCB Layout 設計。</li>
+          <li><strong>1.2.2 機構研發 (ME)</strong>：負責機構及包裝設計及模具開發及配合提供相關之開發文件，如 BOM、機構爆炸圖。</li>
+          <li><strong>1.2.3 光學研發 (OE)</strong>：負責光學之設計及模具開發及配合提供相關之開發文件，如系統亮度模擬。</li>
+          <li><strong>1.2.4 軟體研發 (S/W)</strong>：負責軟體開發及配合硬體開發及測試。</li>
+          <li><strong>1.2.5 熱傳研發 (Thermal)</strong>：負責系統熱傳之設計與模擬及配合提供相關之開發文件，如系統熱傳模擬。</li>
+          <li><strong>1.2.6 安規電源 (EMI/Safety/Power)</strong>：負責各國安規及 EMC (EMI/EMS) 之測試，認證申請及電源 (DC-DC/Ballast) 之測試及驗證。</li>
+          <li><strong>1.2.7 設計成熟驗証 (DMT/DQE)</strong>：負責新機種 EVT/DVT/PVT 階段之 performance / Compatibility/Functionality 等相容性測試及光學/熱傳/電源等之驗證，以提供 Sales/PM 或高層判定產品成熟度之決策參考。(依據中光電的測試標準執行,當客戶有特別要求時將依客戶需求擬定，最後報告會放在 EIP 系統。)</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>1.3 零件工程 (CE)</strong></summary>
+        <p>審查與檢驗零件承認書正確性，收集信賴性報告及完成重要零件首件檢查報告，綠色產品環保規格符合性證明文件承認。</p>
+      </details>
+      <details>
+        <summary><strong>1.4 產品管理 (PM)</strong></summary>
+        <ul>
+          <li>負責提出規格需求，目標時程與價格並制訂產品企劃書及 ROI (Return On Investment投資報酬率)。、協調、跟催機種進度，提出開發進度表 (Master schedule) 及產品成本預估。</li>
+          <li><strong>1.4.1 Core PM</strong>：主導 CO~C4 階段，及試產時 RD 端/客戶端的統一視窗。負責與工廠 PM 完成試產前後相關的規劃和資料移轉。</li>
+          <li><strong>1.4.2 CPC PM</strong>：為工廠新產品開發試產部分的統一視窗。主導 CS-PVT 階段，支援 Core PM 完成試產前後相關的規劃和資料移轉，內部報告整合及定期追蹤至結案。</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>1.5 採購</strong></summary>
+        <ul>
+          <li>1.5.1 提供 RD 新機種產品材料價格及尋求適合之材料供應商。</li>
+          <li>1.5.2 制定供應商管理規範，執行並提出供應商評鑑報告，負責其成本（pricing）、配給 (allocation)、談判 (negotiation)、簽定採購合約 (contract)。</li>
+          <li>1.5.3 提供合格供應商清單 (QVL) 給 RD 作為 C2/C3 階段新零件開發之參考廠商，並發行最後承認之合格供應商名錄 (AVL)。
+            <br>QVL: Qualified Vendor List<br>AVL: Approved Vendor List
+          </li>
+          <li>1.5.4 協助 RD 取得供應商環保規格，符合性証明文件。</li>
+          <li>1.5.5 負責確認 PM 提供之控制清單 (Control List) 中的物料，是否為單一供應商、特殊製程、客戶供應料。</li>
+          <li>1.5.6 針對目標零件提出 2<sup>nd</sup> Source 規劃。</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>1.6 物管/生管</strong></summary>
+        <ul>
+          <li><strong>1.6.1 物管 (MC)</strong>：負責新產品開發各階段之生產性材料的採購，及進料跟催/備料等物料管制工作。</li>
+          <li><strong>1.6.2 生管 (PC)</strong>：負責試作之生產排程，及安排備料/發料/出貨等生產管制。</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>1.7 品質工程 (QE)/進料檢驗 (IQC)/製程品管 (IPQC)/出貨品管 (OQC)/客戶品保 (QA)/供應商品保 (VQA)</strong></summary>
+        <ul>
+          <li><strong>1.7.1 QE (Quality Engineering)</strong>
+            <ul>
+              <li>制定產品檢驗規範與產品品質計劃書。</li>
+              <li>制定可靠度 (Reliability) 及平均無故障時間 (MTBF) 測試計劃並執行及提出測試報告。</li>
+              <li>制定出貨檢驗規範。</li>
+            </ul>
+          </li>
+          <li><strong>1.7.2 VQA (Vendor Quality Assurance)</strong>
+            <ul>
+              <li>執行 QSA, QPA, PPAP 規範，並提出廠商品質評鑑報告，追蹤生產性零件不良問題之解決。</li>
+              <li>制定零件檢驗規範，執行及提出零件檢驗報告。</li>
+            </ul>
+          </li>
+          <li><strong>1.7.3 IPQC (In-process Quality Control)</strong>
+            <ul>
+              <li>制定製程檢驗規範，執行及提出製程檢驗報告。</li>
+              <li>制定 QC 工程圖。</li>
+            </ul>
+          </li>
+          <li><strong>1.7.4 OQC (Outgoing Quality Control)</strong>：執行出貨檢驗及提出報告。</li>
+          <li><strong>1.7.5 CQA (Customer Quality Assurance)</strong>
+            <ul>
+              <li>制定客戶品保規範，執行並追蹤出貨不良問題 (DOA) 之解決。<br>DOA: dead on arrival</li>
+              <li>列席各階段 Review meeting，代表客戶確保品質。</li>
+              <li>主導已量產產品的品質活動與客戶之間的對應窗口及協調工作。</li>
+            </ul>
+          </li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>1.8 生產工程 (PE) / 工業工程 (IE)</strong></summary>
+        <ul>
+          <li><strong>1.8.1 PE (Production Engineering)</strong>
+            <ul>
+              <li>DVT，負責承接 RD 端的新產品設計技術,及負責 PVT (含) 之後，負責將 RD 端的新產品生產技術轉移至製造之任務。</li>
+              <li>參與新產品開發流程，並提出組裝性、測試性、制造性的需求與評估。</li>
+              <li>各項生產、外包治具之製作，生產良品率改善之執行。</li>
+              <li>必須於各階段試產 (Pilot run) 結束後一個工作天內提供出測試問題點報告(Bug List Report)。</li>
+              <li>依據 PM 彙整之資料，負責新產品開發過程中除配附件和包材變更之外的製程變更/功能異常 rework/sorting/規格變更等 MM 的發行 (PCBA 相關變更管控由 PCBA PE 處理之；系統相關變更管控由系統 PE 處理之)。</li>
+              <li>負責測試階段的測試作業指導書，確保正確的測試軟體及設備規格。</li>
+            </ul>
+          </li>
+          <li><strong>1.8.2 IE (Industrial Engineering)</strong>：負責制程安排，及提供組裝作業指導書及標簽 (Label) 之製作。</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>1.9 製造 (PD)</strong></summary>
+        <p>負責各階段成品生產計劃之執行。</p>
+      </details>
+      <details>
+        <summary><strong>1.10 PCBA 製造</strong></summary>
+        <p>負責各階段 PCBA 生產計劃之執行及製程/品質之管控。</p>
+      </details>
+      <details>
+        <summary><strong>1.11 客服 (CSD)</strong></summary>
+        <p>負責各階段產品售後服務之執行，spare parts list 之準備，服務手冊之製作，服務通告之發行。</p>
+      </details>
+      <details>
+        <summary><strong>1.12 會計 / 保稅</strong></summary>
+        <ul>
+          <li>保稅：負責 BOM 之中報海關。</li>
+          <li>會計：負責生產成本之估算。</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>1.13 資料中心 (DC)</strong></summary>
+        <p>負責修改 BOM/ECN，發行及存檔各種技術文件及承認書。</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- 投影機-->
+  <div id="projector" class="content">
+    <div class="tab-buttons">
+      <button id="btn-intro" class="active-tab-btn" onclick="showProjectorTab('intro')">投影機介紹</button>
+      <button id="btn-specs" onclick="showProjectorTab('specs')">投影機規格</button>
+      <button id="btn-usage" onclick="showProjectorTab('usage')">應用場景</button>
+    </div>
+
+    <div id="projector-intro" class="projector-tab" style="display:block;">
+      <h3>投影機介紹</h3>
+      <p class="intro">點擊投影機圖片，查看內部構造與詳細元件介紹。</p>
+
+      <div id="mainArea">
+        <div class="image-panel" id="imagePanel">
+          <img src="MS1.jpg" alt="投影機外觀圖" class="main-img" id="mainImage" />
+
+          <!-- 機構模組ME的文字說明，固定在外層圖片顯示 -->
+          <div id="me-description">
+            <strong>機構模組ME</strong>
+            <ul>
+              <li>外殼（塑膠或金屬材質）</li>
+              <li>腳墊 / 支架（調整角度）</li>
+              <li>吊裝孔（支援天花板吊掛）</li>
+              <li>自動鏡頭蓋（高階機型專有）</li>
+              <li>振膜、音圈、磁鐵（喇叭結構）</li>
+              <li>Class-D 音頻放大器</li>
+              <li>音效處理晶片（虛擬環繞音效、EQ 調校）</li>
+            </ul>
+          </div>
+
+          <div class="hotspot" style="top:8%;left:71.5%;width:19%;height:8%;"
+            data-title="電子模組（EE）"
+            data-content='
+          <ul>
+            <li><strong>(1) 主機板（核心控制）</strong>
+              <ul>
+                <li>主機板（Main Board）</li>
+                <li>影像處理晶片（如 TI DLP、Sony SXRD）</li>
+                <li>記憶體（RAM / ROM）</li>
+                <li>輸入/輸出介面（HDMI、USB、VGA、LAN 等）</li>
+              </ul>
+            </li>
+            <li><strong>(2) 感測與控制模組</strong>
+              <ul>
+                <li>溫度感測器（防止過熱）</li>
+                <li>光感測器（自動調整亮度）</li>
+                <li>IR 接收器（紅外線遙控）</li>
+                <li>藍牙模組</li>
+                <li>Wi-Fi 無線模組</li>
+              </ul>
+            </li>
+            <li><strong>(3) 電源供應模組</strong>
+              <ul>
+                <li>電源板（AC-DC 轉換）</li>
+                <li>電池（僅限攜帶型投影機）</li>
+              </ul>
+            </li>
+          </ul>
+          '></div>
+
+          <div class="hotspot" style="top:91%;left:64.5%;width:24%;height:7%;"
+            data-title="光學OE-光機引擎主體/成像技術"
+            data-content='
+          <p><strong>成像技術：</strong>投影機成像基本原理是藉由高亮度鹵素燈泡產生光源，通過濾鏡、色輪或分光鏡，將光線轉換成紅、綠、藍三色光，再照射到顯影面板，經由光穿透或反射的方式，將影像送到鏡頭，再投射在螢幕或牆面上。</p>
+
+          <h4>成像技術介紹</h4>
+          <ul>
+            <li><strong>3LCD（Liquid Crystal Display）</strong>
+              <ul>
+                <li>結合液晶顯示與投影技術，現多採三片式LCD板。</li>
+                <li>利用LCD面板調節光訊號，使投影色彩更準確。</li>
+                <li>優點：色彩飽和、準確鮮豔，變化細膩。</li>
+                <li>缺點：體積較大、噪音大。</li>
+              </ul>
+            </li>
+            <li><strong>DLP（Digital Light Processing）</strong>（目前公司主要在用）
+              <ul>
+                <li>以DMD數位微鏡為成像核心，屬於反射式投影技術。</li>
+                <li>DMD微鏡快速反射色輪上的顏色以產生影像。</li>
+                <li>優點：明暗對比佳、像素緊密、機身小。</li>
+                <li>缺點：可能產生彩虹效應。</li>
+              </ul>
+            </li>
+            <li><strong>LCoS（Liquid Crystal on Silicon）</strong>
+              <ul>
+                <li>結合DMD與LCD的技術，屬於反射式液晶投影。</li>
+                <li>利用反射面板，光經LCoS反射至分色稜鏡，重新組合為彩色影像。</li>
+                <li>優點：可呈現原生4K、高畫素密度，黑色細節好。</li>
+                <li>缺點：價格高，體積雖小但成本高。</li>
+              </ul>
+            </li>
+          </ul>
+
+          <h4>技術比較表</h4>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead style="background:#f0f0f0;">
+              <tr>
+                <th style="border:1px solid #ccc;padding:6px;">成像技術</th>
+                <th style="border:1px solid #ccc;padding:6px;">優點</th>
+                <th style="border:1px solid #ccc;padding:6px;">缺點</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #ccc;padding:6px;">3LCD</td>
+                <td style="border:1px solid #ccc;padding:6px;">色彩飽和、鮮豔、變化細膩</td>
+                <td style="border:1px solid #ccc;padding:6px;">機身體積較大</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #ccc;padding:6px;">DLP</td>
+                <td style="border:1px solid #ccc;padding:6px;">對比佳、像素銳利、體積小</td>
+                <td style="border:1px solid #ccc;padding:6px;">可能出現彩虹效應</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #ccc;padding:6px;">LCoS</td>
+                <td style="border:1px solid #ccc;padding:6px;">原生4K、高解析度、黑暗細節佳</td>
+                <td style="border:1px solid #ccc;padding:6px;">價格較高</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>其他比較參數</h4>
+          <ul>
+            <li><strong>價格：</strong>LCoS &gt; 3LCD &gt; DLP</li>
+            <li><strong>原始解析度：</strong>LCoS &gt; DLP &gt; 3LCD</li>
+            <li><strong>CP值：</strong>DLP &gt; 3LCD &gt; LCoS</li>
+            <li><strong>對比度：</strong>LCoS &gt; 3LCD &gt; DLP</li>
+            <li><strong>黑暗表現：</strong>LCoS &gt; 3LCD &gt; DLP</li>
+            <li><strong>白色與亮度：</strong>DLP &gt; 3LCD &gt; LCoS</li>
+          </ul>
+          <ul>
+            <li><strong>鏡頭組</strong>
+              <ul>
+                <li>光學鏡片（多層鍍膜，影響畫質）</li>
+                <li>變焦/對焦機構（手動或電動調整）</li>
+                <li>鏡頭位移（Lens Shift）（高階機種支援）</li>
+              </ul>
+            </li>
+            <li><strong>輔助光學元件</strong>
+              <ul>
+                <li>反射鏡（引導光路）</li>
+                <li>分光鏡/合光鏡（3LCD/LCoS使用）</li>
+                <li>偏振片（LCoS提升對比度）</li>
+                <li>濾光片（調整色域或阻隔有害光）</li>
+              </ul>
+            </li>
+          </ul>
+          '></div>
+
+          <div class="hotspot" style="top:9.5%;left:20%;width:16%;height:8%;"
+                data-title="熱傳模組（TE）"
+                data-content="
+          <ul>
+            <li>系統風扇（主動式散熱）</li>
+            <li>熱導管 + 散熱片（提升散熱效率）</li>
+            <li>空氣濾網（防塵、維持散熱效率）</li>
+          </ul>
+          "></div>
+
+          <div class="hotspot" style="top:73%;left:22.5%;width:10%;height:9%;"
+            data-title="光學OE-光源模組"
+            data-content='
+          <ul>
+            <li><strong>燈泡（傳統燈泡）</strong>
+              <ul>
+                <li>主要應用在需高亮度的產品上，如教育、商用及工程領域。</li>
+                <li>氙氣燈（早期）：亮度高，但發熱量大、昂貴、壽命短。</li>
+                <li>超高壓汞燈（新一代）：壽命更長、價格稍高。</li>
+                <li><strong>特點</strong>：高亮度，但需要較長時間預熱，且耗電較多。</li>
+                <li><strong>壽命</strong>：通常約2,000至5,000小時。</li>
+                <li><strong>優點</strong>：亮度較強，適合於大空間使用。</li>
+                <li><strong>缺點</strong>：壽命較短，燈泡需定期更換，維護成本較高。</li>
+              </ul>
+            </li>
+            <li><strong>LED（發光二極體）</strong>
+              <ul>
+                <li>是利用電致發光原理，電流或強電場通過材料時，材料發出光線的光學和電學現象。</li>
+                <li>以LED為光源的架構有三色LED及白光LED+濾色片。</li>
+                <li>其中以RGB LED為主流，由紅藍綠三種不同顏色的3LED光源共同構成投影光源。</li>
+                <li><strong>特點</strong>：能耗低，啟動迅速，畫面色彩鮮豔。</li>
+                <li><strong>壽命</strong>：通常可達20,000小時以上。</li>
+                <li><strong>優點</strong>：壽命長，低熱量及低功耗，成本低、省電。</li>
+                <li><strong>缺點</strong>：亮度相較傳統燈泡低，適合中小型場地和便攜式投影機。</li>
+              </ul>
+            </li>
+            <li><strong>雷射（Laser）</strong>
+              <ul>
+                <li>使用雷射二極體(Laser Diode, LD)作為雷射產生器。</li>
+                <li>產生雷射基本要素：激發來源、亮度高、單色性好。</li>
+                <li>目前投影機製造商通常採用三種不同類型雷射設計：</li>
+                <ul>
+                  <li><strong>混合雷射光</strong>：以藍色雷射光源搭配紅、綠LED光源組成，或搭配紅色LED和藍色雷射，再利用螢光體晶片或色輪產生綠光。</li>
+                  <li><strong>雷射螢光粉</strong>：使用藍光激發黃色磷光體色輪的單一藍色雷射極體陣列，再以瀌鏡分解為紅色和綠色。具有高亮度、成本低且無散斑問題。</li>
+                  <li><strong>RGB雷射</strong>：由紅光、綠光、藍光各自雷射產生，顏色準確、色域廣，體積大且價格較高，並可能出現散斑。</li>
+                </ul>
+                <li><strong>特點</strong>：亮度穩定且高，色彩表現細膩，開機速度快。</li>
+                <li><strong>壽命</strong>：一般超過20,000至30,000小時，有些高端機型更長。</li>
+                <li><strong>優點</strong>：亮度持久穩定，色彩飽和度高，散熱較好，適合專業及商用場合。</li>
+                <li><strong>缺點</strong>：成本較高，但隨技術成熟價格逐漸下降。</li>
+              </ul>
+            </li>
+          </ul>
+          '></div>
+        </div>
+
+        <aside class="sidebar" id="infoBox" aria-live="polite" aria-atomic="true" aria-label="元件詳細說明" role="region" aria-relevant="additions" style="display:none;">
+          <h2>請點選紅框</h2>
+          <div id="infoText" style="color:#555;">
+            點選任一紅框查看元件與模組詳細技術說明。
+          </div>
+        </aside>
+
+        <button id="backButton" aria-label="返回外觀模式">返回</button>
+      </div>
+    </div>
+
+    <div id="projector-specs" class="projector-tab" style="display:none;">
+      <h3>投影機規格</h3>
+      <p>
+        1. 解析度：每一個方向上的像素(pixel)數量，長X寬，單位面積內的像素越多代表解析度越高。<br />
+            - HD (1280x720)：720p<br />
+            - Full HD (1920x1080)：1080p<br />
+            - 4K (3840x2160)：2160p<br />
+            - 8K (7680x4320)<br />
+            HZ (赫茲)：畫面刷新率(Refresh Rate)，即螢幕每秒重新繪製畫面的次數。<br />
+            - 例如：120HZ &gt; 60HZ，畫面更流暢。<br />
+            - 刷新率越高，畫面越流暢。<br />
+            - 高刷新率能夠減少畫面模糊地帶。<br /><br />
+
+        2. 流明（Lumen）：流明越高，亮度越亮，但為環境考量的重要因素。<br />
+           - ANSI流明亮度為實際投影出來的亮度。<br />
+           - ANSI流明亮度僅為光源流明度的1/3。ex：3000流明約=900ANSI。<br />
+           - 建議亮度：<br />
+             • 家用：1000~2000流明<br />
+             • 商務：3000~5000流明<br />
+             • 工程：5000以上<br /><br />
+
+        3. 對比度：<br />
+           - 畫面最亮的白色與最暗的黑色的亮度比值。<br />
+           - 對比度越高則顯得色彩度越飽和、畫面越銳利。<br /><br />
+
+        4. 投射比：數值越低表示在短距離可投射較大畫面。（=距離/畫面寬）<br />
+           - 長焦(RT)：1.5~2.5<br />
+           - 短焦(ST)：0.4~1.5<br />
+           - 超短焦(UST)：&lt;0.4<br /><br />
+
+        5. 鏡頭位移 v.s 梯形校正<br />
+           - 鏡頭位移：透過整個光機鏡頭水平或垂直位移，調整投影影像位置。<br />
+           - 梯形校正：用數位方式讓梯形畫面修正成正方矩形畫面。<br /><br />
+
+        6. 幀率（FPS）：每秒播放影格數<br />
+           - 播放內容的品質。<br />
+           - 常見如30FPS, 60FPS，幀率越高越流暢。<br />
+           - 幀率不穩定可能導致畫面卡頓。
+      </p>
+    </div>
+
+    <div id="projector-usage" class="projector-tab" style="display:none;">
+      <h3>應用場景與建議規格</h3>
+      <p>
+        1. 家庭劇院／娛樂觀影<br />
+        適用場景：客廳、小型影音室、租屋房間、家庭露天院落等。<br />
+        建議規格：<br />
+        - 亮度：遮光環境2000~2400流明即可，有自然光環境建議3000流明以上。<br />
+        - 解析度：Full HD (1920×1080)為主流，追求更高畫質可選4K（3840×2160）。<br />
+        - 對比度：高對比度（10000:1以上）還原電影細節。<br />
+        - 短焦/超短焦鏡頭：空間受限或需近距離投影時（1.5~2.5米投100吋）。<br /><br />
+
+        2. 教育教室／校園講堂<br />
+        適用場景：中小教室、多功能教室、講堂等。<br />
+        建議規格：<br />
+        - 亮度：小教室建議3000以上流明，大講堂/禮堂4000流明以上。<br />
+        - 解析度：至少XGA（1024×768），主流建議WXGA（1280×800）或Full HD。<br />
+        - 螢幕尺寸：建議100吋或以上，所有學生都能清楚觀看。<br />
+        - 光源壽命：LED/雷射光源，免頻繁更換，總運維成本低。<br />
+        - 鏡頭類型：短焦/超短焦鏡頭，適用空間限制場所。<br /><br />
+
+        3. 商務會議<br />
+        適用場景：小型會議室、中大型多功能會議空間。<br />
+        建議規格：<br />
+        - 亮度：<br />
+        &nbsp;&nbsp;- 小型10人：3000~3499流明<br />
+        &nbsp;&nbsp;- 中型20人：3500~4999流明<br />
+        &nbsp;&nbsp;- 大型40人以上：5000流明以上<br />
+        - 解析度：XGA/WXGA~Full HD，文書及多媒體均細膩呈現。<br />
+        - 無線投影：支援Wi-Fi、AirPlay、Miracast等，方便投影各種設備畫面。<br />
+        - 投影尺寸：依空間建議100吋以上、150吋為佳。<br />
+        - 易維護性：快捷開關機、燈泡壽命長。<br />
+        - 多訊號輸入：支援雙信號分畫顯示、USB投影等多元功能。<br /><br />
+
+        4. 戶外露營<br />
+        適用場景：戶外露營、郊遊、移動商展、戶外家庭聚會。<br />
+        建議規格：<br />
+        - 亮度：日間/強光建議3000流明以上，夜間或遮光狀況500~1000流明亦可。<br />
+        - 解析度：HD(720p)或Full HD。<br />
+        - 電源供應：內建電池或可外接行動電源，支援USB-C供電。<br />
+        - 體積重量：便攜式設計（1kg內最佳）。<br />
+        - 連接功能：支援藍牙、Wi-Fi、無線影像傳輸。<br />
+        - 防護設計：防潑水（如IPX2）、耐摔。<br />
+        - 投影距離：短焦設計，1~3米即可投影60~100吋畫面。<br />
+        - 其他：影音播放、藍牙喇叭一體化設計。<br /><br />
+
+        5. 展覽／互動展示<br />
+        適用場景：展覽館、博物館、互動遊戲區、光雕藝術、商場展示。<br />
+        建議規格：<br />
+        - 亮度：依場館大小3000流明~8000流明（高階大場需8000流明以上）。<br />
+        - 解析度：WUXGA（1920×1200）或4K。<br />
+        - 短焦/超短焦：適合展臺近距離大畫面投影。<br />
+        - 色彩與畫質：高色準、高對比度雷射/LED技術。
+      </p>
+    </div>
+  </div>
+
+  <!-- 中強光電各種影像產品 -->
+  <div id="product" class="content">
+    <div class="product-list">
+      <h2>中強光電各種影像產品</h2>
+
+      <h3>家庭娛樂</h3>
+      <ul>
+        <li>家庭娛樂：K1平台、L23 UST模組、L23H UST平台、EX2平台、L23/L23H模組、K1 UST模組、L23/L23H平台、K1 UST平台、MS1平台、EX1平台、U2平台、D51+平台</li>
+        <li>行動微型：L23H UST平台、L23 UST模組、L23/L23H模組、L23/L23H平台、D30平台</li>
+      </ul>
+
+      <h3>企業商用</h3>
+      <ul>
+        <li>會議空間：EX2平台、ML1平台、MS1平台、EX1平台、Z28平台、U2平台</li>
+        <li>商用展示：L23 UST模組、L23H UST平台、EX2平台、L23/L23H模組、L23/L23H平台、ML1平台、MS1平台、EX1平台</li>
+        <li>智能投影：L23 UST模組、L23H UST平台、L23/L23H平台、K1 UST平台</li>
+      </ul>
+
+      <h3>教育市場</h3>
+      <ul>
+        <li>教室：EX2平台、EU1平台、ML1平台、MS1平台、EX1平台、Z28平台、U2平台</li>
+        <li>會議空間：EX2平台、EU1平台、MS1平台、EX1平台、Z28平台</li>
+      </ul>
+
+      <h3>穿戴式顯示光學模組</h3>
+      <p>無</p>
+
+      <h3>嵌入式投影系統</h3>
+      <ul>
+        <li>LED光機引擎：D32平台、D36平台</li>
+      </ul>
+
+      <h3>專業工程投影</h3>
+      <ul>
+        <li>初階工程機：A35LS2平台、35LC2平台、A35LV2平台、R70K平台、R70平台</li>
+        <li>進階工程機：A65LS/LV平台</li>
+        <li>高階工程機：A65LU平台</li>
+        <li>智能輔助：4K雙鏡相機模組</li>
+        <li>軟體解決方案：拼接融合軟體</li>
+        <li>工業解決方案：繪畫輔助、分類輔助、揀貨輔助、組裝輔助</li>
+        <li>沉浸式解决方案：重型車駕駛訓練、天文館投影、CAVE沉浸式投影</li>
+      </ul>
+
+      <h3>車用投影</h3>
+      <ul>
+        <li>車內投影：D30+</li>
+        <li>車外投影：Alder</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // 主頁面切換
+    function showSection(id) {
+      document.querySelectorAll('.content').forEach(div => div.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      // 根據不同區塊顯示預設子頁籤
+      if(id === 'bom') showBomTab('overview');
+      else if(id === 'process') showProcessTab('flow');
+      else if(id === 'projector') showProjectorTab('intro');
+    }
+
+    // BOM子頁籤切換
+    function showBomTab(tab) {
+      document.querySelectorAll('#bom .bom-tab').forEach(div => div.style.display = 'none');
+      document.getElementById('bom-' + tab).style.display = 'block';
+      
+      document.querySelectorAll('#bom .tab-buttons button').forEach(btn => btn.classList.remove('active-tab-btn'));
+      document.getElementById('btn-bom-' + tab).classList.add('active-tab-btn');
+    }
+
+    // 產品流程子頁籤切換
+    function showProcessTab(tab) {
+      document.querySelectorAll('#process .process-tab').forEach(div => div.style.display = 'none');
+      document.getElementById('process-' + tab).style.display = 'block';
+      
+      document.querySelectorAll('#process .tab-buttons button').forEach(btn => btn.classList.remove('active-tab-btn'));
+      document.getElementById('btn-process-' + tab).classList.add('active-tab-btn');
+    }
+
+    // 投影機子頁籤切換
+    function showProjectorTab(tab) {
+      document.querySelectorAll('#projector .projector-tab').forEach(div => div.style.display = 'none');
+      document.getElementById('projector-' + tab).style.display = 'block';
+      
+      document.querySelectorAll('#projector .tab-buttons button').forEach(btn => btn.classList.remove('active-tab-btn'));
+      document.getElementById('btn-' + tab).classList.add('active-tab-btn');
+    }
+
+    // 投影機圖片互動功能
+    function initProjectorImage() {
+      const mainImage = document.getElementById("mainImage");
+      const imagePanel = document.getElementById("imagePanel");
+      const hotspots = document.querySelectorAll(".hotspot");
+      const infoBox = document.getElementById("infoBox");
+      const titleEl = infoBox.querySelector("h2");
+      const contentEl = document.getElementById("infoText");
+      const backButton = document.getElementById("backButton");
+      const meDesc = document.getElementById("me-description");
+
+      // 初始化狀態
+      hotspots.forEach(h => h.style.display = "none");
+      infoBox.style.display = "none";
+      backButton.style.display = "none";
+      meDesc.style.display = "block";
+
+      // 點擊主圖片切換到內部結構視圖
+      mainImage.addEventListener("click", () => {
+        if(mainImage.src.includes("internal")) return;
+
+        mainImage.src = "MS1-internal.jpg";
+        hotspots.forEach(h => h.style.display = "block");
+        infoBox.style.display = "block";
+        backButton.style.display = "block";
+        clearSelection();
+        titleEl.textContent = "請點選紅框";
+        contentEl.textContent = "點選任一紅框查看元件與模組詳細技術說明。";
+        meDesc.style.display = "none";
+      });
+
+      // 返回按鈕
+      backButton.addEventListener("click", () => {
+        mainImage.src = "MS1.jpg";
+        hotspots.forEach(h => h.style.display = "none");
+        infoBox.style.display = "none";
+        backButton.style.display = "none";
+        clearSelection();
+        meDesc.style.display = "block";
+      });
+
+      // 清除所有選中狀態
+      function clearSelection(){
+        hotspots.forEach(h => {
+          h.classList.remove('selected');
+          h.classList.remove('dimmed');
+        });
+        if(imagePanel) imagePanel.classList.remove('dimmed');
+      }
+
+      // 熱點點擊事件
+      hotspots.forEach(hotspot => {
+        hotspot.addEventListener('click', e => {
+          e.stopPropagation();
+          clearSelection();
+          hotspot.classList.add('selected');
+          hotspots.forEach(h => {
+            if(h !== hotspot) {
+              h.classList.add('dimmed');
+            }
+          });
+          imagePanel.classList.add('dimmed');
+          titleEl.innerHTML = hotspot.dataset.title;
+          contentEl.innerHTML = hotspot.dataset.content;
+        });
+      });
+
+      // 點擊空白處清除選擇
+      document.body.addEventListener('click', e => {
+        if (!imagePanel.contains(e.target) && !infoBox.contains(e.target) && e.target !== backButton) {
+          clearSelection();
+          if(infoBox.style.display === "block"){
+            titleEl.textContent = "請點選紅框";
+            contentEl.textContent = "點選任一紅框查看元件與模組詳細技術說明。";
+          }
+        }
+      });
+    }
+
+    // 頁面載入初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      showSection('bom');
+      initProjectorImage();
+    });
+  </script>
+</body>
+</html>
