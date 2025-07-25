@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preload" as="image" href="images/MS1-internal.jpg">
   <title>Projector新手指南</title>
   <style>
     body {
@@ -601,6 +602,9 @@
       <div id="mainArea">
         <div class="image-panel" id="imagePanel">
           <img src="MS1.jpg" alt="投影機外觀圖" class="main-img" id="mainImage" />
+        <div class="projector-tab" id="internal">
+    <img src="images/MS1-internal.jpg" alt="投影機內部構造圖" loading="eager">
+  </div>  
 
           <!-- 機構模組ME的文字說明，固定在外層圖片顯示 -->
           <div id="me-description">
@@ -949,7 +953,7 @@
       </ul>
     </div>
   </div>
-
+ <img src="images/MS1-internal.jpg" style="width:1px;height:1px;opacity:0;position:absolute;pointer-events:none;" alt="">
   <script>
     // 主頁面切換
     function showSection(id) {
@@ -1073,6 +1077,19 @@
       showSection('bom');
       initProjectorImage();
     });
+    function showTab(tabId) {
+      const tabs = document.querySelectorAll('.projector-tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+
+      const selectedTab = document.getElementById(tabId);
+      if (selectedTab) {
+        selectedTab.classList.add('active');
+      }
+    }
+
+    // 預載圖片（雙保險）
+    const preloadImage = new Image();
+    preloadImage.src = "images/MS1-internal.jpg";
   </script>
 </body>
 </html>
