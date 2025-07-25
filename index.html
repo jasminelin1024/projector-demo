@@ -138,25 +138,24 @@
     /* 投影機互動圖片樣式 */
     .image-panel {
       position: relative;
-      max-width: 800px;
-      margin: 0 auto;
-      border: 1px solid #ddd;
-      background: #fff;
-      padding: 10px;
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
     }
     .image-panel img {
       width: 100%;
-      height: auto;
       display: block;
     }
     .hotspot {
       position: absolute;
       border: 2px dashed red;
-      border-radius: 12px;
-      cursor: pointer;
-      z-index: 10;
+      top: 25%;
+      left: 30%;
+      width: 20%;
+      height: 15%;
+      box-sizing: border-box;
       background-color: rgba(255,0,0,0.1);
-      display: none;
+      border-radius: 10px; /* 圓角設定在這 */
     }
     .hotspot.selected {
       background-color: rgba(253, 123, 123, 0.3);
@@ -618,9 +617,15 @@
               <li>Class-D 音頻放大器</li>
               <li>音效處理晶片（虛擬環繞音效、EQ 調校）</li>
             </ul>
+            <strong>軟體模組SW</strong>
+            <ul>
+              <li>作業系統（如 Android、Linux）</li>
+              <li>應用程式支援（YouTube、Netflix、無線投影）</li>
+              <li>韌體控制與操作介面設定</li>
+            </ul>
           </div>
 
-          <div class="hotspot" style="top:8%;left:71.5%;width:19%;height:8%;"
+          <div class="hotspot" style="top:8%;left:72.5%;width:20%;height:8%;"
             data-title="電子模組（EE）"
             data-content='
           <ul>
@@ -650,7 +655,7 @@
           </ul>
           '></div>
 
-          <div class="hotspot" style="top:91%;left:64.5%;width:24%;height:7%;"
+          <div class="hotspot" style="top:92.5%;left:65%;width:25%;height:7%;"
             data-title="光學OE-光機引擎主體/成像技術"
             data-content='
           <p><strong>成像技術：</strong>投影機成像基本原理是藉由高亮度鹵素燈泡產生光源，通過濾鏡、色輪或分光鏡，將光線轉換成紅、綠、藍三色光，再照射到顯影面板，經由光穿透或反射的方式，將影像送到鏡頭，再投射在螢幕或牆面上。</p>
@@ -739,7 +744,7 @@
           </ul>
           '></div>
 
-          <div class="hotspot" style="top:9.5%;left:20%;width:16%;height:8%;"
+          <div class="hotspot" style="top:8.5%;left:20%;width:16%;height:8%;"
                 data-title="熱傳模組（TE）"
                 data-content="
           <ul>
@@ -749,7 +754,7 @@
           </ul>
           "></div>
 
-          <div class="hotspot" style="top:73%;left:22.5%;width:10%;height:9%;"
+          <div class="hotspot" style="top:74.5%;left:22.2%;width:10%;height:9%;"
             data-title="光學OE-光源模組"
             data-content='
           <ul>
